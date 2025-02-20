@@ -30,3 +30,9 @@ const cleanupResponse = () => {
         setDisableButtonState(false);
     }, 5000);
 };
+
+const showAnswer = answer => {
+    setTimeout(() => {
+        answerSelector.innerHTML = answer;
+    }, 2000);
+}
