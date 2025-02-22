@@ -1,38 +1,29 @@
-//SELECTORS
-const btnSelector = document.querySelector("#button");
-const inputSelector = document.querySelector("#input");
-const answerSelector = document.querySelector("#answer");
+// SELECTORS
+const btn = document.querySelector("#button");
+const inputField = document.querySelector("#input");
+const answerField = document.querySelector("#answer");
 
+// API ENDPOINT
+const API_URL = "https://yesno.wtf/api";
 
-//API
-const API_ENDPOINT = "https://yesno.wtf/api";
+// FUNCTION TO FETCH ANSWER
+const fetchAnswer = () => {
+    if (!inputField.value.trim()) return; // Ignore if input is empty
 
-//FLAGS
-let isRequestInProgress = false;
-
-const setIsRequestInProgress = value => {
-    isRequestInProgress = value;
+    btn.disabled = true;
+    fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+            answerField.value = data.answer;
+            setTimeout(clearResponse, 3000);
+        });
 };
 
-const setDisableButtonState = isDisabling => {
-    if (isDisabling) {
-        btnSelector.setAttribute("disabled", "disabled");
-    }
-    else {
-        btnSelector.removeAttribute("disabled");
-    }
+// FUNCTION TO CLEAR RESPONSE
+const clearResponse = () => {
+    answerField.value = "";
+    btn.disabled = false;
 };
 
-const cleanupResponse = () => {
-    setTimeout(() => {
-        answerSelector.innerHTML = "";
-        setIsRequestInProgress(false);
-        setDisableButtonState(false);
-    }, 5000);
-};
-
-const showAnswer = answer => {
-    setTimeout(() => {
-        answerSelector.innerHTML = answer;
-    }, 2000);
-}
+// EVENT LISTENER
+btn.addEventListener("click", fetchAnswer);
